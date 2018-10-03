@@ -134,103 +134,120 @@ client.on("guildMemberAdd", member => {
       });
 
 
-client.on("message", message => {
-    if (message.author.bot) return;
-     if (message.content === prefix + "help general") {
-  const embedss3 = new Discord.RichEmbed() 
-      .setColor("RANDOM")
-      .setThumbnail(message.author.avatarURL)
-      .setDescription(`**
-    شيك على الخاص
-     Check Your DM**`)
-
-		 message.channel.send(`<@${message.author.id}>`, {embed : embedss3});
-  const embed = new Discord.RichEmbed() 
-      .setColor("RANDOM")
-      .setThumbnail(message.author.avatarURL)
-      .setDescription(`**
-╭━━━╮╱╱╱╱╭╮╱╭━━━╮╱╱╭╮
-╰╮╭╮┃╱╱╱╱┃┃╱┃╭━╮┃╱╱┃┃
-╱┃┃┃┣━━┳━┫┃╭┫╰━━┳┳━╯┣━━╮
-╱┃┃┃┃╭╮┃╭┫╰╯┻━━╮┣┫╭╮┃┃━┫
-╭╯╰╯┃╭╮┃┃┃╭╮┫╰━╯┃┃╰╯┃┃━┫
-╰━━━┻╯╰┻╯╰╯╰┻━━━┻┻━━┻━━╯
-
-__General Commands__ =
-
-__1__ = >id - __To See Your ID__ 
-
-__2__ = >user - __To See Your Stats__
-
-__3__ = >sug - __To Suggest Anything__
-
-__4__ = >profile - __To See Your Profile__
-
-__5__ = >credit - __To See Your Credit__
-
-__6__ = >daily - __To Get Your Daily Money__
-
-__7__ = >rep - __To Rep Anyone__
-
-__8__ = >title - __To Change Your Profile Title__
-
-__9__ = >trans - __To Transfer Your Money To Anyone__
-
-__10__ = >members - __To Show Member's Status__
-
-__11__ = >info - __To See Bot info__
-
-__12__ = >avatar - __To Take Avatar of Anyone__
-
-__13__ = >ser-av - __To Get Server Avatar__
-
-__14__ = >bot - __Bot Status__
-
-__15__ = >own - __Bot Owner__
-
-__17__ = >server - __To Showing Details Of Server__
-
-__18__ = >colors - __To Take Any Color__
-
-__19__ = >emoji - __To Take Any Emoji__
-
-__20__ = >mcskin - __To Get Your Minecraft Skin__
-
-__21__ = >fortnite - __Get Fortnite Stats__
-
-__22__ = >ping - __To See Your Ping__
-
-__23__ = >roll - __Using on Any Giveaway__
-
-__24__ = >cc - __To Make Category__
-
-__25__ = >vc - __To Make Voice Channel__
-
-__26__ = >tt - __To Make Text Channel__
-
-__27__ = >perms - __To See Bot Permission's__
-
-__28__ = >invite - __To Invite DarkSide Bot__
-
-__29__ = >link - __Get Invite link__
-
-__30__ = >invites - __To See The People You Invited__
-
-__31__ = >iinv - __To Show Stats of Invite Link__
-
-**
-`)
-
-       .setTimestamp()
-       .setFooter(message.author.username, message.author.avatarURL)
-message.author.sendEmbed(embed)
-
-.catch(() => {
-  message.channel.send('🚫الخاص مغلق');
-});
-
+ client.on('message', message => {
+    let args = message.content.split(' ').slice(1);
+    if(message.content.startsWith(prefix + 'role')) {
+        let member = message.mentions.users.first();
+        let role = args.join(' ').replace(member, '').replace(args[0], '').replace(' ', '');
+        console.log(role);
+        if(member) {
+              if(role.startsWith('-')) {
+                let roleRe = args.join(' ').replace(member, '').replace(args[0], '').replace('-', '').replace(' ', '');
+                console.log(roleRe);
+                let role1 = message.guild.roles.find('name', roleRe);
+                console.log(`hi`);
+const ee =new Discord.RichEmbed()
+ .setDescription('**:x: I can’t find the role.**')
+ .setFooter('Requested By '+message.author.username,message.author.avatarURL)
+        if(!role1) return message.channel.send(ee);                message.guild.member(member).removeRole(role1.id);
+                
+                     const e = new Discord.RichEmbed()
+                     
+                 .setDescription(':white_check_mark:** Changed Roles For **'+member+'**,** '+'**'+'-'+role1.name+'**')
+                .setFooter('Requested By '+message.author.username,message.author.avatarURL)
+                .setColor('BLACK')
+                 message.channel.send(e)
+            } else if(!role.startsWith('-')) {
+                let roleRe = args.join(' ').replace(member, '').replace(args[0], '').replace('-', '').replace(' ', '');
+                let role1 = message.guild.roles.find('name', roleRe);
+const ee =new Discord.RichEmbed()
+ .setDescription('**:x: I can’t find the role.**')
+ .setFooter('Requested By : '+message.author.username,message.author.avatarURL)
+        if(!role1) return message.channel.send(ee);                message.guild.member(member).addRole(role1);
+                const e = new Discord.RichEmbed()
+                
+                .setDescription(':white_check_mark:** Changed Roles For **'+member+'**,** '+'**'+'+'+role1.name+'**')
+                .setFooter('Requested By : '+message.author.username,message.author.avatarURL)
+                .setColor('BLACK')
+                 message.channel.send(e)
+            } else {
+                message.reply(`يجب عليك كتابة اسم الرتبة`);
+            } 
+        }
+ else if(args[0] == 'all') {
+  if(role.startsWith('-')) { 
+       let roleRe = args.join(' ').replace(member, '').replace(args[0], '').replace('-', '').replace(' ', '');
+         let role1 = message.guild.roles.find('name', roleRe);
+                   message.channel.send(`الرجاء الانتظار حتى يتم الانتهاء من الامر`).then(msg =>{
+           message.guild.members.forEach(m => {
+            message.guild.member(m).removeRole(role1.id);
+        });
+         msg.edit(`** <a:like:472979723358699520>  Done...\n**` +role1.name+`** Has Taken From __${message.guild.members.size}__ Member**`);
+    });
+  }
+    if(role) {
+    let role1 = message.guild.roles.find('name', role);
+    if(!role1) return;
+    message.channel.send(`الرجاء الانتظار حتى يتم الانتهاء من الامر`).then(msg => {
+        message.guild.members.forEach(m => {
+            message.guild.member(m).addRole(role1);
+        });
+        msg.edit(`** <a:like:472979723358699520>  Done...\n**` +  role1.name+`** Has Given To __${message.guild.members.size}__ Members **`);
+    });
 }
-}); 
+} else if(args[0] == 'humans') {
+     if(role.startsWith('-')) { 
+       let roleRe = args.join(' ').replace(member, '').replace(args[0], '').replace('-', '').replace(' ', '');
+         let role1 = message.guild.roles.find('name', roleRe);
+                   message.channel.send(`الرجاء الانتظار حتى يتم الانتهاء من الامر`).then(msg =>{
+           message.guild.members.forEach(m => {
+            message.guild.member(m).removeRole(role1.id);
+        });
+         msg.edit(`** <a:like:472979723358699520>  Done...\n**` +role1.name+`** Has Taken From __${message.guild.members.size}__ Member**`);
+    });
+  }
+
+    if(role) {
+        let role1 = message.guild.roles.find('name', role);
+
+ const ee =new Discord.RichEmbed()
+ .setDescription('I Cann’t Find This Role')
+ .setFooter('Requested By : '+message.author.username,message.author.avatarURL)
+        if(!role1) return message.channel.send(ee);
+        message.channel.send(`الرجاء الانتظار حتى يتم الانتهاء من الامر`).then(msg => {
+            message.guild.members.filter(m =>m.user.bot == false).forEach(m => {
+                message.guild.member(m).addRole(role1);
+            });
+        msg.edit(`** <a:like:472979723358699520>  Done...**`);
+        });
+    }
+} else if(args[0] == 'bots') {
+     if(role.startsWith('-')) { 
+       let roleRe = args.join(' ').replace(member, '').replace(args[0], '').replace('-', '').replace(' ', '');
+         let role1 = message.guild.roles.find('name', roleRe);
+                   message.channel.send(`الرجاء الانتظار حتى يتم الانتهاء من الامر`).then(msg =>{
+           message.guild.members.forEach(m => {
+            message.guild.member(m).removeRole(role1.id);
+        });
+         msg.edit(`** <a:like:472979723358699520>  Done...**`);
+    });
+  }
+    if(role) {
+        let role1 = message.guild.roles.find('name', role);
+       const ee =new Discord.RichEmbed()
+ .setDescription('I Cann’t Find This Role')
+ .setFooter('Requested By : '+message.author.username,message.author.avatarURL)
+        if(!role1) return message.channel.send(ee);
+        message.channel.send(`الرجاء الانتظار حتى يتم الانتهاء من الامر`).then(msg => {
+            message.guild.members.filter(m =>m.user.bot == true).forEach(m => {
+                message.guild.member(m).addRole(role1);
+            });
+        msg.edit(`** <a:like:472979723358699520>  Done...\n**` +role1.name+`** Has Given To __${message.guild.members.size}__ Member**`);
+});
+}
+}
+}
+});
 
 
 
